@@ -1,22 +1,4 @@
-// CircleLinkedlist //
-#include <stdio.h>
-#include <stdlib.h>
 
-typedef struct LinkedNode{
-    int data;
-    struct LinkedNode *link;
-} LinkedNode;
-
-typedef struct headNode {
-    LinkedNode *head;
-}headNode;
-
-headNode* CreateHead() {
-    headNode *C;
-    C = (headNode*)malloc(sizeof(headNode));
-    C->head = NULL;
-    return C;
-}
 // CircleLinkedlist //
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,7 +32,7 @@ void CreateNode(headNode* A, int data) {
     }
     else {
         temp = A->head;
-        while(temp->link != NULL){
+        while(temp->link != A->head){
             temp = temp->link;
         }
         temp->link = newnode;         // CircleLinkedList 생성
@@ -78,28 +60,42 @@ int Delte_data(headNode*A, int data){
     temp = A->head;
     int value = 0;
     
-    if(temp->data == data){
-        value = temp->data;
-        printf("마지막 노드를 삭제하였습니다.\n이제 노드가 존재하지 않습니다.");
-        free(temp);
-    }
-    if(temp->link->data == data){
-        value =temp->link->data;
-        A->head = temp;
-        temp->link = A->head;
-        printf("노드가 한개 남았습니다.");
-        return value; 
-    }
-    while(temp->link->data != data){
-        if(temp->link->data == data){
-            value = temp->link->data;
-            delete = temp->link;
-            temp->link = delete->link;
-            free(delete);
-            break;
+    if (temp->data ==data){
+        delete = A->head;
+        while(1){
+            if(temp->link == delete){
+                break;
+            }
+            temp = temp->link;
         }
+        A->head = delete->link;
+        temp->link = A->head;
+        value = delete->data;
+        free(delete);
+        delete = NULL;
+        return value;
     }
-    return value;
+    else {
+        while(1){
+            if(temp->link->data ==data){
+                delete = temp->link;
+                temp->link = delete->link;
+                value = delete->data;
+                free(delete);
+                delete =NULL;
+                return value;
+            }
+            temp = temp->link;
+            if(temp->link->data == A->head->data){
+                return 0;
+            }
+            
+        }
+        
+        
+        return value;
+    }
+    
 } 
 
 int SearchingValue(headNode *A, int data){
@@ -128,9 +124,40 @@ int SearchingValue(headNode *A, int data){
 int HowManyNode(headNode*A){
     LinkedNode *temp;
     temp = A->head;
-    int i =1;
-    while (temp->link != A->head){
-        i++;
+    int i =0;
+    if(temp ==NULL){
+        return 0;
     }
-    return i;
+    if(temp->link == A->head){
+        return 1;
+    }
+    while (1){
+        i++;
+        temp = temp->link;
+        if(temp->data == A->head->data){
+            return i;
+        }
+    
+    }
+}
+
+int main(void){
+    headNode *C;
+    C =CreateHead();
+    CreateNode(C,10);
+    CreateNode(C,20);
+    CreateNode(C,30);
+    CreateNode(C,40);
+    CreateNode(C,50);
+    Print_Node(C);
+    int i;
+    i =HowManyNode(C);
+    printf("\n%d",i);
+    
+    i = Delte_data(C,30);
+    printf("\n%d\n",i);
+    i =HowManyNode(C);
+    printf("\n%d\n",i);
+    Print_Node(C);
+    
 }
