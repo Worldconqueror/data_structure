@@ -35,7 +35,7 @@ void InReaf(DeckLine *C,int data){
     }
     else {
         new->rlink = C->front;
-        C->front ->llink = new;
+        C->front->llink = new;
         C->front = new;
         DeckData *temp;
         temp = C->front;
@@ -50,7 +50,6 @@ void InReaf(DeckLine *C,int data){
 void OutReaf(DeckLine *C) {
     if(C->front == NULL){
         printf("노드가 존재하지 않습니다.");
-        return;
     }
     else {
         DeckData *temp;
@@ -60,7 +59,6 @@ void OutReaf(DeckLine *C) {
         C->front = temp->rlink;
         free(temp);
         printf("삭제한 데이터 -> %d\n",value);
-        return;
     }
 }
 
@@ -101,22 +99,30 @@ void OutBack(DeckLine*C){
 }
 
 void printf_data(DeckLine*C){
-    while(C->front !=C->back){
-        printf(" %d ",C->front->data);
-        C->front = C->front->rlink;
+    DeckData* temp;
+    temp = C->front;
+    while(temp !=C->back){
+        printf(" %d ",temp->data);
+        temp = temp->rlink;
     }
-    printf(" %d ", C->back->data);
+    printf(" %d ", temp->data);
 }
 
 
 int main(void){
     DeckLine *C;
     C = CreateDeckLine();
-    InBack(C,1);
-    InBack(C,2);
+    InReaf(C,10);
+    InReaf(C,20);
+    InReaf(C,30);
+    InReaf(C,40);
     OutReaf(C);
-    InBack(C,4);
+    InBack(C,-10);
+    InBack(C,-20);
+    InBack(C,-30);
+    InBack(C,-40);
+    printf_data(C);
+    printf("\n");
     OutBack(C);
     printf_data(C);
-    
 }
