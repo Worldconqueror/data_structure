@@ -62,16 +62,19 @@ int PopQueue(inout *A) {
 
 int LenQueue(inout*A){
     int len =0;
-    if(A->front == A->back){
+    queuedata *temp;
+    temp = A->back;
+    if(temp == A->front){
         return len;
     }
     else {
-        while(A->front->link != A->back){
-            A->front = A->front->link;
+        while(temp != A->front){
+            temp = temp->link;
             len++;
         }
+        return len+1;
     }
-    return len+1;
+   
 }
 
 void pritnf_queue(inout *A){
@@ -93,12 +96,15 @@ int main(void) {
     CreateQueue(C,1);
     CreateQueue(C,2);
     CreateQueue(C,3);
-    pritnf_queue(C);
-    int pop;
-    pop = PopQueue(C);
-    printf("%3d",pop);
+    CreateQueue(C,4);
+    CreateQueue(C,5);
     pritnf_queue(C);
     int len;
     len = LenQueue(C);
-    printf("%3d",len);
+    printf("\n%d",len);
+    int i;
+    i = PopQueue(C);
+    printf("\n%d\n",i);
+    pritnf_queue(C);
+    
 }
