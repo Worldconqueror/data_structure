@@ -89,10 +89,11 @@ int main(void) {
     Create(C,17);
     Create(C,18);
     Create(C,19);
-    
     Printf_Stack(C);   //[10 11 13 14 15 16 17 18 19 ]
     data__ = PopStack(C);    
-    printf("%d",data__); //10
-
+    printf("\n%d\n",data__); //19
+    int i;
+    i = lenStack(C);
+    printf("%d\n",i);
     Printf_Stack(C); //[11 13 14 15 16 17 18 19]
 }
