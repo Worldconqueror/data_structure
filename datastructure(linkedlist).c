@@ -56,11 +56,11 @@ void printf_poly(polynomial T){
     printf("written the Polynomial: ");
     for(i=0; i<=T.degree; i++){
         if (i==T.degree){
-            printf("%f",T.coef[i]);
+            printf("%3.0f",T.coef[i]);
             break;
         }
 
-        printf("%f^%d + ",T.coef[i],T_degree);
+        printf("%3.0f^%d + ",T.coef[i],T_degree);
         T_degree--;
     }
 }
@@ -72,11 +72,15 @@ polynomial get_poly(){
     
     printf("\nplz input Max degree of Polynimial : ");
     scanf("%d", &x);
+    if (x >=0){
+        printf("\n인수를 입력하세요.\n");
+        
     
     for(i=0; i<=x; i++){
         printf("plz put coef>> ");
         scanf("%f", &input_num);
         T.coef[i] = input_num;
+    }
     }
     T.degree = x;
     
@@ -88,8 +92,14 @@ int main(void) {
     polynomial A = {4,{3,2,1,2,2}};
     polynomial B = {3,{2,4,0,1}};
     polynomial C;
-
+    polynomial Z;
+    printf_poly(A);
+    printf("\n");
+    printf_poly(B);
+    printf("\n");
     C = addpoly(A, B);
-    printf_poly(C);    
-    get_poly();
+    printf_poly(C);
+    Z = get_poly();
+    printf_poly(Z);
+    
 }
