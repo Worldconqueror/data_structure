@@ -145,6 +145,13 @@ int main(void){
 
     Printf_Grape(C);
     Searching_distance(C,0);
-    
-
+    printf("\n");
+    Searching_distance(C,1);
+    printf("\n");
+    Searching_distance(C,2);
+    printf("\n");
+    Searching_distance(C,3);
+    printf("\n");
+    Searching_distance(C,4);
+   
 }
