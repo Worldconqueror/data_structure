@@ -78,8 +78,9 @@ int i =0;
 
 
 void Binary_Searching(int list[],int start, int number,int key){
-    int last = number-1;
+    int last = number;
     int mid = (start+last)/2;
+    
     if(i>=MAX){
         printf("%d번째 시도, 원소를 찾지 못찾지못했습니다",i);
         return;
@@ -95,26 +96,33 @@ void Binary_Searching(int list[],int start, int number,int key){
         if(list[start]==key){
             i++;
             printf("%d번째만에 발견했습니다.",i);
+            printf("\n%d번째에 위치합니다.",start+1);
             return;
         }
+        i++;
         printf("%d번째 시도, 발견하지 못했습니다.");
+        return;
     }
         
     
     if(list[mid]==key){
         i++;
         printf(" %d번째만에 발견되었습니다.", i);
+        printf("\n%d번째에 위치합니다.",mid+1);
         return;
     }
     
     else if(list[mid]>key){
         i++;
         last = mid-1;
+        
     }
     
     else if(list[mid]<key){
         i++;
         start = mid+1;
+        
+        
     }
     
     Binary_Searching(list,start,last,key);
@@ -131,8 +139,8 @@ int main(void){
     Printf_array(list_a);
     Quick_Repeat(list_a,0,7);
     Printf_array(list_a);
-    Simple_Searching(list_a,MAX,1957747793);
+    Simple_Searching(list_a,7,1957747793);
     printf("\n");
-    Binary_Searching(list_a,0,MAX,1681692777);
+    Binary_Searching(list_a,0,7,1681692777);
 }
 
