@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <memory.h>
+#define MAX(a,b) ((a>b) ? a:b)
 
 typedef struct Node{
     int data;
@@ -7,112 +9,144 @@ typedef struct Node{
     struct Node* right;
 }Node;
 
+int get_number(Node* target){
+    int height = 0;
+    if(target!=NULL) height = MAX(get_number(target->left) , get_number(target->right)) +1;
+    return height;
+}
 
-
-
-Node* making_Node(Node* C,int data){
-    if(C==NULL){
-        Node* new = (Node*)malloc(sizeof(Node));
-        new->data = data;
-        new->right = NULL;
-        new->left = NULL;
-        return new;
+int get_BF(Node* C){
+    if(C == NULL){
+        return 0;
     }
-    Node* temp = C;
-    if(temp->data>data){
-        temp->left = making_Node(temp->left,data);    
-        reblance(C);
-        return C;
+    return get_number(C->left) - get_number(C->right);
+}
+
+Node* LL_array(Node* target){
+  
+        Node* temp = target->left;
+        target->left = temp->right;
+        temp->right = target;
+        return temp;
+    
+}
+
+Node* RR_array(Node*target){
+    
+        Node* temp = target->right;
+        target->right = temp->left;
+        temp->left = target;
+        return temp;
+    
+}
+
+Node* LR_array(Node* target){
+    
+        Node* temp =target->left;
+        target->left = RR_array(temp);
+        return LL_array(target);
+    
+}
+
+Node* RL_array(Node* target){
+    
+        Node* temp = target->right;
+        target->right = LL_array(temp);
+        return RR_array(target);
+    
+    
+}
+
+
+Node* rebalance(Node**p){
+    int a = get_BF(*p);
+
+    if(a>1){
+        if(get_BF((*p)->left) > 0){
+            *p = LL_array(*p);
+        }
+        else *p = LR_array(*p);
     }
-    else{
-        temp->right = making_Node(temp->right,data);
-        reblance(C);
-        return C;
+    
+    else if(a<-1){
+        if(get_BF((*p)->right) < 0){
+            *p = RR_array(*p);
+        }
+        else *p = RL_array(*p);
+    }
+    return *p;
+}
+
+
+Node* making_AVL(Node** C, int data){
+    if(*C==NULL){
+        *C = (Node*)malloc(sizeof(Node));
+        (*C)->data = data;
+        (*C)->left = NULL;
+        (*C)->right = NULL;
+    }
+    else if((*C)->data >data){
+        (*C)->left = making_AVL(&((*C)->left),data);
+        *C= rebalance(C);
+    }
+    else if((*C)->data <data){
+        (*C)->right = making_AVL(&((*C)->right),data);
+        *C = rebalance(C);
+    }
+    return *C;
+}
+
+void display_AVLtree(Node* C){
+    if(C!=NULL){
+        display_AVLtree(C->left);
+        printf(" %d ",C->data);
+        display_AVLtree(C->right);
     }
 }
 
-void Printf_tree(Node* C){
-    if(C==NULL){
+void searching_data(Node*C, int data){
+    if(C==NULL) {
+        printf(" 트리가 존재하지 않습니다.\n");
         return;
     }
-    Printf_tree(C->left);
-    printf(" %d ",C->data);
-    Printf_tree(C->right);
-}
-
-// AVL 구현
-int get_number(Node*C){
-    int a=0;
-    int b=0;
     Node* temp = C;
-    while(temp->right!=NULL){
-        b++;
-        temp = temp->right;
-    }
-    temp =C;
-    while(temp->left!=NULL){
-        a++;
-        temp = temp->left;
-    }
-    return a-b;
-}
-void LL_rotate(Node*C){
-    int a = C->data;
-    int b = C->left->data;
-    Node* temp = C->left;
-    C->data = b;
-    temp->data = a;
-    C->left = temp->left;
-    C->right = temp;
-}
-
-void RR_rotate(Node*C){
-    int a = C->data;
-    int b = C->right->data;
-    Node* temp = C->right;
-    temp->data = a;
-    C->data = b;
-    C->right = temp->right;
-    C->left = temp;
-}
-
-void reblance(Node*C){
-   
-    int height = get_number(C);
-    if(1>=height>=-1){
-        return;
-    }
-
-    if(height>1){
-        printf("+_1");
-        if(get_number(C->left)>0){
-            LL_rotate(C);
+    int i = 1;
+    while(temp!=NULL){
+        if(temp->data == data){
+            printf("%d 번째만에 찾았습니다! \n",i);
             return;
         }
-        RR_rotate(C->left);
-        LL_rotate(C);
+        if(temp->data > data){
+            temp = temp->left;
+        }
+        else {
+            temp = temp->right;
+        }
         
-        return;
+        
+        i++;
     }
-    return;
+    if(temp==NULL){
+        printf("못찾았습니다!\n %d번 시도",i);
+    }
 }
 
 
 
 
 int main(void){
-    Node* C = NULL;
-    C= making_Node(C,30);
-    making_Node(C,20);
-    making_Node(C,10);
-    making_Node(C,5);
-    //making_Node(C,15);
-    //making_Node(C,25);
-    //making_Node(C,35);
-    //making_Node(C,45);
-    //making_Node(C,40);
-    //making_Node(C,50);
-    Printf_tree(C);
-    printf("\n%d",get_number(C));
+    Node* C =NULL;
+    C = making_AVL(&C,10);
+    making_AVL(&C,20);
+    making_AVL(&C,30);
+    making_AVL(&C,40);
+    making_AVL(&C,50);
+    making_AVL(&C,60);
+    making_AVL(&C,70);
+    making_AVL(&C,80);
+    making_AVL(&C,90);
+    making_AVL(&C,100);
+    display_AVLtree(C);
+    searching_data(C,100);
+ 
 }
-
